@@ -1,0 +1,88 @@
+version: '3.7'
+
+networks:
+  nextcloud:
+
+services:
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    networks:
+      - nextcloud
+    ports:
+      - "8080:80"
+    volumes:
+      - /tmp/nextcloud/html:/var/www/html
+      - /tmp/nextcloud/data:/srv/nextcloud/data
+    extra_hosts:
+      - "cloud.errbot.local:10.20.30.40"
+      - "office.errbot.local:10.20.30.40"
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      - NEXTCLOUD_TRUSTED_DOMAINS='cloud.errbot.local'
+      - NEXTCLOUD_DATA_DIR=/srv/nextcloud/data
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=password
+      - MYSQL_HOST=nextcloud-mariadb
+      - REDIS_HOST=nextcloud-redis
+    restart: unless-stopped
+
+  mariadb:
+    image: mariadb
+    container_name: nextcloud-mariadb
+    restart: unless-stopped
+    volumes:
+      - /tmp/nextcloud/mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud
+
+  redis:
+    image: redis
+    container_name: nextcloud-redis
+    networks:
+      - nextcloud
+    restart: unless-stopped
+
+  coturn:
+    image: instrumentisto/coturn
+    container_name: nextcloud-coturn
+    restart: unless-stopped
+    ports:
+      - "3478:3478/tcp"
+      - "3478:3478/udp"
+    networks:
+      - nextcloud
+    command:
+      - -n
+      - --log-file=stdout
+      - --min-port=49160
+      - --max-port=49200
+      - --realm=cloud.errbot.local
+      - --use-auth-secret
+      - --static-auth-secret=password
+
+  collabora:
+    image: collabora/code
+    container_name: nextcloud-collabora
+    restart: unless-stopped
+    networks:
+      - nextcloud
+    ports:
+      - "9980:9980"
+    extra_hosts:
+      - "cloud.errbot.local:10.20.30.40"
+      - "office.errbot.local:10.20.30.40"
+    environment:
+      - 'domain=cloud.errbot.local'
+      - 'dictionaries=en'
+    cap_add:
+      - MKNOD
+    tty: true
