@@ -33,9 +33,9 @@ Save the Client ID and Secret Key.
 
 1. Run the `oauth.py` script:
 
-```sh
-python oauth.py
-```
+    ```sh
+    python oauth.py
+    ```
 
 2. Provide the following data:
     - Nextcloud installation base URL
@@ -44,16 +44,16 @@ python oauth.py
 
 3. It will open a page in your browser to authorize the OAuth client with the logged in user.
 
-4 .After granting access to the OAuth client, you will be redirected to a screen with the data you must add in your **BOT_IDENTITY** section of your `config.py`:
+4. After granting access to the OAuth client, you will be redirected to a screen with the data you must add in your **BOT_IDENTITY** section of your `config.py`:
 
-```py
-BOT_IDENTITY = {
-    'domain': 'http://localhost:8080',
-    'oauth_token': 'YOUR-TOKEN',
-    'oauth_key': 'YOUR-KEY',
-    'oauth_secret': 'YOUR-SECRET',
-}
-```
+    ```py
+    BOT_IDENTITY = {
+        'domain': 'http://localhost:8080',
+        'oauth_token': 'YOUR-TOKEN',
+        'oauth_key': 'YOUR-KEY',
+        'oauth_secret': 'YOUR-SECRET',
+    }
+    ```
 
 ## Contributing
 
