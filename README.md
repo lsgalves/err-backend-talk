@@ -1,5 +1,8 @@
 # err-backend-talk
 
+> [!IMPORTANT]  
+> This errbot backend has been deprecated with `0.1.0` as the last release. But since Nextcloud Talk 17.1 [native support for bots](https://nextcloud-talk.readthedocs.io/en/latest/bots/) has been added. The repository will remain open and archived.
+
 This is a backend for [Nexcloud Talk](https://nextcloud.com/talk/) for [Errbot](https://errbot.io/).
 
 ## Installation
